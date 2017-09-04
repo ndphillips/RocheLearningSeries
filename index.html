@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fast and Frugal Trees (FFTrees)</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Fast and Frugal Trees (FFTrees)">
+  <meta name="author" content="Dr. Nathaniel Phillips">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Fast and Frugal Trees (FFTrees)</h1>
+    <h2>Experiences developing a tool to create, visualise, and evaluate a machine learning based classifier model</h2>
+    <p>Dr. Nathaniel Phillips<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <p><q>How can people make good decisions based on limited, noisy information?</q></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="nobackground" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Limited Time. Limited information.</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><br></p>
+
+<p><img src="images/threeexamples.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="100%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="nobackground" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Cook County Hospital, 1996</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="images/crowdedemergency.jpg" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>&quot;As the city’s principal public hospital, Cook County was the place of last resort for the hundreds of thousands of Chicagoans without health insurance. Resources were stretched to the limit. The hospital’s cavernous wards were built for another century. There were no private rooms, and patients were separated by flimsy plywood dividers. [...] Doctors once trained a homeless man to do routine lab tests because there was no one else available.&quot; Malcolm Gladwell, Blink.</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Heart Attack Diagnosis</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="images/paindecision.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="60%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>How do doctors make decisions? Experience. Intuition. Clinical judgment</li>
+</ul>
+
+<p><img src="images/doctordeciding.jpg" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="90%" style="display: block; margin: auto;" /></p>
+
+<ul>
+<li>In a Michigan hospital, doctors sent 90% of patients to the ICU, although only 25%  were actually having a heart attack.</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Emergency Room Solution: a fast-and-frugal tree (FFT)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>A fast-and-frugal decision tree (FFT) developed by Green &amp; Mehr (1997).</li>
+<li>Tree cut the false-alarm rate in half</li>
+<li>Tree is transparent, easy to modify, and accepted by physicians (unlike regression).</li>
+</ul>
+
+<h3>What is a fast-and-frugal decision tree (FFT)?</h3>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/GreenMehrFFT.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="65%" style="display: block; margin: auto;" /></p>
+
+<p>Green &amp; Mehr (1997) &quot;What alters physicians&#39; decisions to admit to the coronary care unit?&quot;</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <h2>Fast-and-Frugal Decision Tree (FFT)</h2>
+
+<ul>
+<li>An FFT is a decision tree with exactly two branches from each node, where one (or in the case of the final node, both) of the branches are exit branches (Martignon et al., 2008)</li>
+</ul>
+
+<!-- #### Descriptive Uses -->
+
+<!-- - Inference (Gigerenzer & Goldstein, 1996) -->
+
+<!-- - Judge's bailing decisions (Dhami, 2003) -->
+
+<!-- - Fish mating (Dugatkin & Godin, 1996) -->
+
+<!-- #### Prescriptive Uses -->
+
+<!-- - Terrorist attacks (Garcia, 2016) -->
+
+<!-- - Bank failure (Neth et al., 2014) -->
+
+<!-- - Depression diagnosis (Jenny et al., 2013) -->
+
+<p><img src="images/martignon2008_ss.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/heartfft.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="80%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Why a simple algorithm?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="images/simplevcomplex.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="80%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="90%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="90%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="90%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="90%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="90%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Weapons of Math Destruction</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="images/oneilted.png" alt="asdf"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Weapons of Math Destruction</h2>
+  </hgroup>
+  <article data-timings="">
+    <blockquote>
+<p>Algorithms are opinions embedded in code. [Most people think] algorithms are objective and true and scientific. That&#39;s a marketing trick. It&#39;s also a marketing trick to intimidate you with algorithms, to make you trust and fear algorithms because you trust and fear mathematics. A lot can go wrong when we put blind faith in big data.</p>
+
+<p>Data laundering [is] a process by which technologists hide ugly truths inside black box algorithms and call them objective. When they&#39;re secret, important and destructive, I&#39;ve coined a term for these algorithms:  <span class = 'red'>Weapons of math desctruction</span></p>
+</blockquote>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Weapons of Math Destruction</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p>Getting a car to drive [autonomously] was an impressive feat. But it’s also a bit unsettling, since it isn’t completely clear how the car makes its decisions. [..] [W]hat if one day it did something unexpected—crashed into a tree, or sat at a green light? [...] The system is so complicated that even the engineers who designed it may struggle to isolate the reason for any single action. </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/darksecretcar.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="70%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Weapons of Math Destruction</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p>“It is a problem that is already relevant, and it’s going to be much more relevant in the future [...] <strong>Whether it’s an investment decision, a medical decision, or maybe a military decision, you don’t want to just rely on a ‘black box’ method</strong>.” ~ Tommi Jaakkola, MIT professor of machine learning</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/jaakkola.jpg" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="80%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Simple Heuristics that make us smart</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p>Rather than using black box algoroithms we can use simple heuristics</p>
+
+<p><img src="images/gigerenzer.jpg" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="80%" style="display: block; margin: auto;" /></p>
+
+<p>&quot;The mind can use less information and computation or take less time and nevertheless achieve better performance.&quot; ~ Gigerenzer &amp; Brighton, 2009</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/simpleheuristicscover.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="80%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Catching a Ball</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <h3>Complex</h3>
+
+<p>&quot;A baseball outfielder behaves as if he had solved a set of differential equations in predicting the trajectory of the ball [...] something functionally equivalent to the mathematical calculations is going on&quot; (Dawkins, 1989)</p>
+
+<p><img src="images/baseballequation.jpg" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="80%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h3>Heuristic</h3>
+
+<p>Gaze Heuristic (Gigerenzer, 2007)</p>
+
+<ol>
+<li>Fix your gaze on the ball</li>
+<li>Start running</li>
+<li>Adjust your running speed so that the angle of gaze remains constant.</li>
+</ol>
+
+<p><img src="images/gazeheuristic.jpg" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="70%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Investment</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <h3>Complex</h3>
+
+<p>Nobel prize winning Harry Markowitz model: </p>
+
+<p>Selects the most efficient portfolio by analyzing various possible portfolios of different securities</p>
+
+<p><img src="images/riskreturngraph.jpg" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h3>Heuristic</h3>
+
+<p>1 / N Heuristic: </p>
+
+<p>Equally distribute funds across all N assets</p>
+
+<p><br></p>
+
+<p><img src="images/pie.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="70%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>Investment</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <h3>Complex</h3>
+
+<p>Nobel prize winning Harry Markowitz model:</p>
+
+<p>Selects the most efficient portfolio by analyzing various possible portfolios of different securities</p>
+
+<p><img src="images/riskreturngraph.jpg" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h3>Heuristic</h3>
+
+<p>1 / N Heuristic: </p>
+
+<p>Equally distribute funds across N assets</p>
+
+<p><br></p>
+
+<p><img src="images/markowitzpie.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="70%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>FFTrees</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>A toolbox to create fast-and-frugal decision trees (FFTs).</li>
+<li>FFTs that either Describe decision processes &#39;in the lab&#39; or Prescribe decision strategies &#39;in the field&#39;.</li>
+<li>Minimal to no programming, extensive examples and guides. </li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/FFTrees_Logo.jpg" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="80%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Tutorial and Documentation</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="images/FFTrees_Tutorial_SS.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="90%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Example: Heart Disease</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="right">age</th>
+<th align="right">sex</th>
+<th align="left">cp</th>
+<th align="right">trestbps</th>
+<th align="right">chol</th>
+<th align="right">fbs</th>
+<th align="left">restecg</th>
+<th align="right">thalach</th>
+<th align="right">exang</th>
+<th align="right">oldpeak</th>
+<th align="left">slope</th>
+<th align="right">ca</th>
+<th align="left">thal</th>
+<th align="right">diagnosis</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">63</td>
+<td align="right">1</td>
+<td align="left">ta</td>
+<td align="right">145</td>
+<td align="right">233</td>
+<td align="right">1</td>
+<td align="left">hypertrophy</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">2.3</td>
+<td align="left">down</td>
+<td align="right">0</td>
+<td align="left">fd</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">67</td>
+<td align="right">1</td>
+<td align="left">a</td>
+<td align="right">160</td>
+<td align="right">286</td>
+<td align="right">0</td>
+<td align="left">hypertrophy</td>
+<td align="right">108</td>
+<td align="right">1</td>
+<td align="right">1.5</td>
+<td align="left">flat</td>
+<td align="right">3</td>
+<td align="left">normal</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="right">67</td>
+<td align="right">1</td>
+<td align="left">a</td>
+<td align="right">120</td>
+<td align="right">229</td>
+<td align="right">0</td>
+<td align="left">hypertrophy</td>
+<td align="right">129</td>
+<td align="right">1</td>
+<td align="right">2.6</td>
+<td align="left">flat</td>
+<td align="right">2</td>
+<td align="left">rd</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="right">37</td>
+<td align="right">1</td>
+<td align="left">np</td>
+<td align="right">130</td>
+<td align="right">250</td>
+<td align="right">0</td>
+<td align="left">normal</td>
+<td align="right">187</td>
+<td align="right">0</td>
+<td align="right">3.5</td>
+<td align="left">down</td>
+<td align="right">0</td>
+<td align="left">normal</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">41</td>
+<td align="right">0</td>
+<td align="left">aa</td>
+<td align="right">130</td>
+<td align="right">204</td>
+<td align="right">0</td>
+<td align="left">hypertrophy</td>
+<td align="right">172</td>
+<td align="right">0</td>
+<td align="right">1.4</td>
+<td align="left">up</td>
+<td align="right">0</td>
+<td align="left">normal</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">56</td>
+<td align="right">1</td>
+<td align="left">aa</td>
+<td align="right">120</td>
+<td align="right">236</td>
+<td align="right">0</td>
+<td align="left">normal</td>
+<td align="right">178</td>
+<td align="right">0</td>
+<td align="right">0.8</td>
+<td align="left">up</td>
+<td align="right">0</td>
+<td align="left">normal</td>
+<td align="right">0</td>
+</tr>
+</tbody></table>
+
+<h3>Goal: Predict binary diagnosis classification</h3>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>The FFTrees() function</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># Step 1: Install and load FFTrees (v.1.3.2)
+install.packages(&quot;FFTrees&quot;)
+library(&quot;FFTrees&quot;)
+
+# Step 2: Create FFTs
+heart.fft &lt;- FFTrees(formula = diagnosis ~.,  # Formula
+                     data = heart.train,      # Training data
+                     data.test = heart.test,  # Test data
+                     main = &quot;Heart Disease&quot;,  # Optional labels
+                     decision.labels = c(&quot;Low-Risk&quot;, &quot;High-Risk&quot;))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">plot(heart.fft, data = &quot;test&quot;)  # Training data
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="55%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Additional features</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>Choose a tree building algorithm.
+
+<ul>
+<li>Max, zig-zag, ifan, dfan</li>
+</ul></li>
+<li>Specify a tree directly &#39;in words&#39;</li>
+</ul>
+
+<pre><code class="r">my.tree = 
+&#39;If age &gt; 50, predict FALSE.
+ If sex = {m}, predict TRUE.
+ If ca &gt; 1, predict TRUE, otherwise, FALSE&#39;)
+</code></pre>
+
+<ul>
+<li>Give differential weight to sensitivity (avoiding misses) and specificity (avoiding false-alarms)</li>
+<li>Incorporate cue costs in evaluating and/or building trees.</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/medicaltestcost.jpg" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="60%" style="display: block; margin: auto;" /></p>
+
+<p><img src="images/roc.jpg" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="70%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>ShinyFFTrees</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>A point-and click (no programming), web-based version of FFTrees with around 90% of the funcionality of FFTrees</li>
+<li>Link: <a href="http://econpsychbasel.shinyapps.io/ShinyFFTrees/">http://econpsychbasel.shinyapps.io/ShinyFFTrees/</a></li>
+</ul>
+
+<p><img src="images/shinyfftrees_ss.png" title="plot of chunk unnamed-chunk-34" alt="plot of chunk unnamed-chunk-34" width="60%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <article data-timings="">
+    <p><q>How well can simple FFTs compete with classical rational models and cutting-edge machine learning algorithms?</q></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <h2>Prediction Simulation</h2>
+
+<ul>
+<li>10 datasets from the UCI Machine Learning Database.</li>
+<li>50% Training, 50% Testing</li>
+<li>Created FFTs with the &#39;ifan&#39; algorithm (Phillips et al. 2017)</li>
+<li>FFTrees vs rpart, regression, random forests...</li>
+<li>Criterion: Balanced accuracy
+
+<ul>
+<li><code>mean(sensitivity, specificity)</code></li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="images/datacollage.png" title="plot of chunk unnamed-chunk-35" alt="plot of chunk unnamed-chunk-35" width="90%" style="display: block; margin: auto;" /></p>
+
+<!-- --- -->
+
+<!-- ```{r out.width = "60%", echo = FALSE} -->
+
+<!-- plot(mushrooms.fft) -->
+
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r out.width = "60%", echo = FALSE} -->
+
+<!-- breast.fft <- FFTrees(diagnosis ~., data = breastcancer, main = "Breast Cancer", decision.labels = c("Healthy", "Cancer")) -->
+
+<!-- plot(breast.fft) -->
+
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r out.width = "60%", echo = FALSE} -->
+
+<!-- titanic.fft <- FFTrees(survived ~., data = titanic, main = "Titanic", decision.labels = c("Died", "Survived")) -->
+
+<!-- plot(titanic.fft) -->
+
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r out.width = "60%", echo = FALSE, message = FALSE, warning = FALSE} -->
+
+<!-- set.seed(100) -->
+
+<!-- forestfires$area <- forestfires$area > 0 -->
+
+<!-- forest.fft <- FFTrees(area ~., data = forestfires, main = "Forest Fires", decision.labels = c("None", "Fire"), train.p = .5) -->
+
+<!-- plot(forest.fft, "train") -->
+
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r out.width = "60%", echo = FALSE} -->
+
+<!-- plot(forest.fft, "test") -->
+
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r out.width = "60%", echo = FALSE} -->
+
+<!-- plot(forest.fft, what = "cues") -->
+
+<!-- ``` -->
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Speed and frugality</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="60%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Speed and frugality</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" width="60%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Fitting Accuracy</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="80%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Prediction Accuracy</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="figure/unnamed-chunk-39-1.png" title="plot of chunk unnamed-chunk-39" alt="plot of chunk unnamed-chunk-39" width="80%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <article data-timings="">
+    <p><img src="images/MLR_Simulation_Trees.jpg" title="plot of chunk unnamed-chunk-40" alt="plot of chunk unnamed-chunk-40" width="72%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>FFTrees</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="images/fftreeshex.png" title="plot of chunk unnamed-chunk-41" alt="plot of chunk unnamed-chunk-41" width="100%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>Why simple algorithms?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Simple algorithms can tell compelling stories. Black box algorithms don&#39;t.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>Less Is more</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="images/londontemp_A.png" title="plot of chunk unnamed-chunk-42" alt="plot of chunk unnamed-chunk-42" width="100%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>Less Is more</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="images/londontemp_B.png" title="plot of chunk unnamed-chunk-43" alt="plot of chunk unnamed-chunk-43" width="100%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <hgroup>
+    <h2>Less Is more</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="images/londontemp_C.png" title="plot of chunk unnamed-chunk-44" alt="plot of chunk unnamed-chunk-44" width="100%" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Limited Time. Limited information.'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Cook County Hospital, 1996'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Heart Attack Diagnosis'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Emergency Room Solution: a fast-and-frugal tree (FFT)'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='NA'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Why a simple algorithm?'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='NA'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='NA'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='NA'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='NA'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='NA'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Weapons of Math Destruction'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Weapons of Math Destruction'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Weapons of Math Destruction'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Weapons of Math Destruction'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Simple Heuristics that make us smart'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Catching a Ball'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Investment'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Investment'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='FFTrees'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Tutorial and Documentation'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Example: Heart Disease'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='The FFTrees() function'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='NA'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Additional features'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='ShinyFFTrees'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='NA'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='NA'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Speed and frugality'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Speed and frugality'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Fitting Accuracy'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Prediction Accuracy'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='NA'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='FFTrees'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Why simple algorithms?'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Less Is more'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Less Is more'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Less Is more'>
+         39
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
