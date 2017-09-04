@@ -2,16 +2,41 @@
 title       : Fast and Frugal Trees (FFTrees)
 subtitle    : Experiences developing a tool to create, visualise, and evaluate a machine learning based classifier model 
 author      : Dr. Nathaniel Phillips
-job         : 
+job         : Roche EU Learning Series
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
 widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
+---&twocol
+
+
+## Roche Internship
+
+***=left
+
+
+- Task: Create an interactive tool for exploring and visualising PRO (Patient Reported Outcome) data. 
+
+
+```{r, fig.margin = TRUE, echo = FALSE, eval = TRUE, out.width = "90%", fig.align='center'}
+knitr::include_graphics(c("images/pro_cartoon.gif"))
+```
+
+
+***=right
+
+- Status: Most underlying code for visualizations is complete. To be integrated into Adrian Waddel's Teal framework
+
+### Teal (Adrian Waddell)
+
+
+```{r, fig.margin = TRUE, echo = FALSE, eval = TRUE, out.width = "100%", fig.align='center'}
+knitr::include_graphics(c("images/tealss.png"))
+```
+
 ---
-
-
 
 <q>How can people make good decisions based on limited, noisy information?</q>
 
@@ -25,6 +50,8 @@ load("data/FFTrees_mlr_df.RData")
 
 knitr::opts_chunk$set(echo = TRUE, dpi = 400, fig.align='center', message = FALSE)
 ```
+
+
 
 
 ---  .nobackground
@@ -67,8 +94,6 @@ knitr::include_graphics(c("images/paindecision.png"))
 ```
 
 ***=right
-
-- How do doctors make decisions? Experience. Intuition. Clinical judgment
 
 ```{r , fig.margin = TRUE, echo = FALSE, out.width = "90%", fig.align='center'}
 knitr::include_graphics(c("images/doctordeciding.jpg"))
@@ -126,11 +151,14 @@ knitr::include_graphics(c("images/martignon2008_ss.png"))
 
 ***=right
 
-
+### An example FFT
 ```{r , fig.margin = TRUE, echo = FALSE, out.width = "80%", fig.align='center', message = FALSE, echo = FALSE}
 knitr::include_graphics(c("images/heartfft.png"))
 ```
 
+- Easily communicated.
+- Fast to implement
+- Requires little information
 
 
 ---
@@ -369,8 +397,14 @@ legend("bottomright",
 
 > Algorithms are opinions embedded in code. [Most people think] algorithms are objective and true and scientific. That's a marketing trick. It's also a marketing trick to intimidate you with algorithms, to make you trust and fear algorithms because you trust and fear mathematics. A lot can go wrong when we put blind faith in big data.
 
-> Data laundering [is] a process by which technologists hide ugly truths inside black box algorithms and call them objective. When they're secret, important and destructive, I've coined a term for these algorithms:  <span class = 'red'>Weapons of math desctruction</span>
+> When [algorithms] are secret, important and destructive, I've coined a term for these algorithms:  <span class = 'red'>Weapons of math desctruction</span>
  
+ 
+- Cathy O'Neil 
+```{r, out.width = "40%", echo = FALSE}
+knitr::include_graphics("images/oneilted.png")
+```
+
 
 --- &twocol
 
@@ -378,11 +412,15 @@ legend("bottomright",
 
 ***=left
 
+<br>
+
 Getting a car to drive [autonomously] was an impressive feat. But it’s also a bit unsettling, since it isn’t completely clear how the car makes its decisions. [..] [W]hat if one day it did something unexpected—crashed into a tree, or sat at a green light? [...] The system is so complicated that even the engineers who designed it may struggle to isolate the reason for any single action. 
+
+~ Will Knight, MIT Technology Review, April 2017
 
 ***=right
 
-```{r, out.width = "70%", echo = FALSE}
+```{r, out.width = "60%", echo = FALSE}
 knitr::include_graphics("images/darksecretcar.png")
 ```
 
@@ -395,7 +433,12 @@ knitr::include_graphics("images/darksecretcar.png")
 ***=left
 
 
-“It is a problem that is already relevant, and it’s going to be much more relevant in the future [...] **Whether it’s an investment decision, a medical decision, or maybe a military decision, you don’t want to just rely on a ‘black box’ method**.” ~ Tommi Jaakkola, MIT professor of machine learning
+**Whether it’s an investment decision, a medical decision, or maybe a military decision, you don’t want to just rely on a ‘black box’ method**.” ~ Tommi Jaakkola, MIT professor of machine learning
+
+<br>
+<br>
+
+### What is the alternative to a black box algorithm?
 
 ***=right
 
@@ -411,7 +454,7 @@ knitr::include_graphics("images/jaakkola.jpg")
 ***=left
 
 
-Rather than using black box algoroithms we can use simple heuristics
+Rather than using black box algorithms we can use simple heuristics
 
 
 ```{r, out.width = "80%", echo = FALSE}
@@ -525,22 +568,79 @@ knitr::include_graphics("images/markowitzpie.png")
 ```
 
 
+
+--- &twocol
+
+***=left
+
+## Why Heuristics?
+
+<br>
+
+<br>
+
+
+- Discover and tell meaningful stories from your data.
+
+- Focus on what is important, ignore what is not.
+
+- Give a realistic assessment of uncertainty and risk.
+    - i.e.; Avoid overfitting
+
+
+***=right
+
+<br>
+
+
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "80%", fig.align='center', message = FALSE, echo = FALSE}
+ knitr::include_graphics(c("images/simplicitymaze.png"))
+```
+
+
+<br>
+
+<i>Simplicity is the ultimate sophistication</i> ~ Leonardo da Vinci
+
+<br>
+
+*The art of being wise is the art of knowing what to overlook* ~ William James
+
+
+<br>
+
+<!-- > If [an algorithm] that measures up very well on the performance criterion is nevertheless totally incomprehensible to a human expert, can it be described as knowledge? Under the common-sense definition of this term […] it is not ~ Quinlan (1999) -->
+
+
 ---&twocol
 ## FFTrees
 
 ***=left
 
-- A toolbox to create fast-and-frugal decision trees (FFTs).
-- FFTs that either Describe decision processes 'in the lab' or Prescribe decision strategies 'in the field'.
+- A toolbox to create fast-and-frugal decision trees (FFTs) for binary classification decisions.
+
+- Any kind of data.
+
 - Minimal to no programming, extensive examples and guides. 
+
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "60%", fig.align='center', message = FALSE, echo = FALSE}
+ knitr::include_graphics(c("images/FFTrees_Logo.jpg"))
+```
 
 
 ***=right
 
+### Manuscript
 
-```{r , fig.margin = TRUE, echo = FALSE, out.width = "80%", fig.align='center', message = FALSE, echo = FALSE}
- knitr::include_graphics(c("images/FFTrees_Logo.jpg"))
+- Phillips, Neth, Woike & Gaissmaier. (2017). FFTrees: A toolbox to create, visualize, and evaluate fast-and-frugal decision trees.
+
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "100%", fig.align='center', message = FALSE, echo = FALSE}
+ knitr::include_graphics(c("images/FFTManuscriptP2.png"))
 ```
+
+
+
+
 
 
 
@@ -591,14 +691,41 @@ heart.fft <- FFTrees(formula = diagnosis ~.,  # Formula
 plot(heart.fft, data = "test")  # Training data
 ```
 
----&twocol
 
-## Additional features
+
+--- &twocol
+
+## Example: Diagnosing muscle disorders
+
 
 ***=left
 
-- Choose a tree building algorithm.
-    - Max, zig-zag, ifan, dfan
+
+- Problem: How to diagnose children as having one of two muscle disorders?
+
+- Data: 147 children with ~ 10 different medical measurements.
+
+- Collaboration between Dr. Patricia Haefner (University of Basel) and Matthew Pitt (NHS, UK)
+
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "50%", fig.align='center', message = FALSE, echo = FALSE}
+ knitr::include_graphics(c("images/backmuscles.jpg"))
+```
+
+
+***=right
+
+### Muscle Disorder FFT
+
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "100%", fig.align='center', message = FALSE, echo = FALSE}
+ knitr::include_graphics(c("images/muscledisordersfft.png"))
+```
+
+---&twocol
+
+## Additional FFTrees features
+
+***=left
+
 - Specify a tree directly 'in words'
 
 ```{r, eval = FALSE}
@@ -630,10 +757,10 @@ knitr::include_graphics(c("images/roc.jpg"))
 ---
 ## ShinyFFTrees
 
-- A point-and click (no programming), web-based version of FFTrees with around 90% of the funcionality of FFTrees
+- A point-and click (no programming), web-based version of FFTrees with around 90% of the functionality of FFTrees
 - Link: http://econpsychbasel.shinyapps.io/ShinyFFTrees/
 
-```{r , fig.margin = TRUE, echo = FALSE, out.width = "60%", fig.align='center'}
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "50%", fig.align='center'}
 knitr::include_graphics(c("images/shinyfftrees_ss.png"))
 ```
 
@@ -649,11 +776,11 @@ knitr::include_graphics(c("images/shinyfftrees_ss.png"))
 ***=left
 
 ## Prediction Simulation
-
+<br>
+<br>
 
 - 10 datasets from the UCI Machine Learning Database.
 - 50% Training, 50% Testing
-- Created FFTs with the 'ifan' algorithm (Phillips et al. 2017)
 - FFTrees vs rpart, regression, random forests...
 - Criterion: Balanced accuracy
     - `mean(sensitivity, specificity)`
@@ -664,21 +791,6 @@ knitr::include_graphics(c("images/shinyfftrees_ss.png"))
 knitr::include_graphics(c("images/datacollage.png"))
 ```
 
-
-
-
-<!-- --- -->
-<!-- ```{r out.width = "60%", echo = FALSE} -->
-<!-- plot(mushrooms.fft) -->
-<!-- ``` -->
-
-
-
-<!-- --- -->
-<!-- ```{r out.width = "60%", echo = FALSE} -->
-<!-- breast.fft <- FFTrees(diagnosis ~., data = breastcancer, main = "Breast Cancer", decision.labels = c("Healthy", "Cancer")) -->
-<!-- plot(breast.fft) -->
-<!-- ``` -->
 
 
 <!-- --- -->
@@ -710,6 +822,60 @@ knitr::include_graphics(c("images/datacollage.png"))
 <!-- ```{r out.width = "60%", echo = FALSE} -->
 <!-- plot(forest.fft, what = "cues") -->
 <!-- ``` -->
+
+
+
+--- .class #id 
+## Prediction Accuracy
+
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "80%", fig.align='center', fig.width = 8, fig.height = 6}
+{
+  
+  data <- subset(FFTrees.mlr.df, 
+                 ((algorithm == "SVM" & 
+                     task.id %in% c("arrhythmia", "audiology")) == FALSE &
+                    algorithm %in% c("FFTi", "CART", "NB", "LR", "RLR", "RF", "SVM")))
+  
+  data <- rbind(subset(data, algorithm == "FFTi"),
+                subset(data, algorithm == "CART"),
+                subset(data, algorithm == "NB"),
+                subset(data, algorithm == "LR"),
+                subset(data, algorithm == "RLR"),
+                subset(data, algorithm == "RF"),
+                subset(data, algorithm == "SVM")
+  )
+  
+  par(mar = c(5, 5, 4, 1) + .1)
+  yarrr::pirateplot(bac.test ~ algorithm, 
+                    data = data, 
+                    inf.f.o = 0,
+                    inf.b.o = 0,
+                    avg.line.lwd = 3,
+                    sortx = "sequential",
+                    ylim = c(.5, 1), gl = seq(.5, 1, .1), 
+                    yaxt = "n", xaxt = "n", xlab = "Algorithm",
+                    point.cex = .2, ylab = "", 
+                    quant = c(.25, .75), 
+                    quant.col = gray(.5), 
+                    quant.lwd = 1)
+  
+  mtext("bacc", side = 2, line = 3.5)
+  mtext("testing", side = 2, line = 2.75, cex = .8)
+  
+  axis(1, 1:7, labels = c("FFT", "CART", "NB", "LR", "RLR", "RF", "SVM"), lwd = 0, lwd.ticks = 1)
+  axis(2, seq(.5, 1, .1), las =1)
+}
+abline(h = .815, lty = 2, lwd = 1.5)
+```
+
+
+
+--- .class #id 
+
+```{r , fig.margin = TRUE, echo = FALSE, out.width = "72%", fig.align='center'}
+knitr::include_graphics(c("images/MLR_Simulation_Trees.jpg"))
+```
+
 
 
 
@@ -771,104 +937,72 @@ segments(mcu, pci, rep(7.5, length(data.name)), seq(.1, .9, length.out = length(
 
 
 
---- .class #id 
-## Fitting Accuracy
-
-```{r , fig.margin = TRUE, echo = FALSE, out.width = "80%", fig.align='center', fig.width = 8, fig.height = 6}
-{
-  
-  data <- subset(FFTrees.mlr.df, 
-                 ((algorithm == "SVM" & 
-                     task.id %in% c("arrhythmia", "audiology")) == FALSE &
-                    algorithm %in% c("FFTi", "CART", "NB", "LR", "RLR", "RF", "SVM")))
-  
-  data <- rbind(subset(data, algorithm == "FFTi"),
-                subset(data, algorithm == "CART"),
-                subset(data, algorithm == "NB"),
-                subset(data, algorithm == "LR"),
-                subset(data, algorithm == "RLR"),
-                subset(data, algorithm == "RF"),
-                subset(data, algorithm == "SVM")
-  )
-  
-  par(mar = c(5, 5, 4, 1) + .1)
-  yarrr::pirateplot(bac.train ~ algorithm, 
-                    data = data, 
-                    inf.f.o = 0,
-                    inf.b.o = 0,
-                    avg.line.lwd = 3,
-                    sortx = "sequential",
-                    ylim = c(.5, 1), gl = seq(.5, 1, .1), 
-                    yaxt = "n", xaxt = "n", xlab = "Algorithm",
-                    point.cex = .2, ylab = "", 
-                    quant = c(.25, .75), 
-                    quant.col = gray(.5), 
-                    quant.lwd = 1)
-  
-  mtext("bacc", side = 2, line = 3.5)
-  mtext("training", side = 2, line = 2.75, cex = .8)
-  
-  axis(1, 1:7, labels = c("FFT", "CART", "NB", "LR", "RLR", "RF", "SVM"), lwd = 0, lwd.ticks = 1)
-  axis(2, seq(.5, 1, .1), las =1)
-}
-abline(h = .865, lty = 2, lwd = 1.5)
-
-```
-
-
---- .class #id 
-## Prediction Accuracy
-
-```{r , fig.margin = TRUE, echo = FALSE, out.width = "80%", fig.align='center', fig.width = 8, fig.height = 6}
-{
-  
-  data <- subset(FFTrees.mlr.df, 
-                 ((algorithm == "SVM" & 
-                     task.id %in% c("arrhythmia", "audiology")) == FALSE &
-                    algorithm %in% c("FFTi", "CART", "NB", "LR", "RLR", "RF", "SVM")))
-  
-  data <- rbind(subset(data, algorithm == "FFTi"),
-                subset(data, algorithm == "CART"),
-                subset(data, algorithm == "NB"),
-                subset(data, algorithm == "LR"),
-                subset(data, algorithm == "RLR"),
-                subset(data, algorithm == "RF"),
-                subset(data, algorithm == "SVM")
-  )
-  
-  par(mar = c(5, 5, 4, 1) + .1)
-  yarrr::pirateplot(bac.test ~ algorithm, 
-                    data = data, 
-                    inf.f.o = 0,
-                    inf.b.o = 0,
-                    avg.line.lwd = 3,
-                    sortx = "sequential",
-                    ylim = c(.5, 1), gl = seq(.5, 1, .1), 
-                    yaxt = "n", xaxt = "n", xlab = "Algorithm",
-                    point.cex = .2, ylab = "", 
-                    quant = c(.25, .75), 
-                    quant.col = gray(.5), 
-                    quant.lwd = 1)
-  
-  mtext("bacc", side = 2, line = 3.5)
-  mtext("testing", side = 2, line = 2.75, cex = .8)
-  
-  axis(1, 1:7, labels = c("FFT", "CART", "NB", "LR", "RLR", "RF", "SVM"), lwd = 0, lwd.ticks = 1)
-  axis(2, seq(.5, 1, .1), las =1)
-}
-abline(h = .815, lty = 2, lwd = 1.5)
+---
+```{r out.width = "60%", echo = FALSE}
+plot(mushrooms.fft)
 ```
 
 
 
---- .class #id 
-
-```{r , fig.margin = TRUE, echo = FALSE, out.width = "72%", fig.align='center'}
-knitr::include_graphics(c("images/MLR_Simulation_Trees.jpg"))
+---
+```{r out.width = "60%", echo = FALSE}
+breast.fft <- FFTrees(diagnosis ~., data = breastcancer, main = "Breast Cancer", decision.labels = c("Healthy", "Cancer"))
+plot(breast.fft)
 ```
 
 
 
+
+
+
+---&twocol
+
+## Conclusion
+
+***=left
+
+- I have personally been amazed by how well fast-and-frugal trees can predict data.
+
+- Try FFTrees, you might be surprised by how well it works, and generate meaningful insights.
+
+- When using an algorithm, ask yourself two questions:
+
+    - "What did I learn from an algorithm that I didn't know before?"
+    - "If, suddenly, the algorithm consistently fails, will I be able to know why?"
+
+***=right
+
+
+```{r, out.width = "100%", echo = FALSE}
+heart.fft <- FFTrees(diagnosis ~ ., data = heartdisease)
+plot(heart.fft)
+```
+
+
+---&twocol
+
+## Thank you!
+
+***=left
+
+Email: Nathaniel.D.Phillips.is@gmail.com
+
+Website: http://ndphillips.github.io
+
+FFTrees R package:
+
+- `install.packages("FFTrees")`
+
+ShinyFFTrees: https://econpsychbasel.shinyapps.io/ShinyFFTrees
+
+
+***=right
+
+
+```{r, out.width = "100%", echo = FALSE}
+heart.fft <- FFTrees(diagnosis ~ ., data = heartdisease)
+plot(heart.fft)
+```
 
 
 
